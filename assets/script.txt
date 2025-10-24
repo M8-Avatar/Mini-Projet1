@@ -1,0 +1,45 @@
+document.addEventListener("DOMContentLoaded", function () {
+    // Gestion de la recherche
+    let searchInput = document.getElementById("search");
+    let videoCards = document.querySelectorAll(".video-card");
+
+    searchInput.addEventListener("input", function () {
+        let filter = this.value.toLowerCase();
+        videoCards.forEach(card => {
+            let title = card.getAttribute("data-title").toLowerCase();
+            card.style.display = title.includes(filter) ? "block" : "none";
+        });
+    });
+
+    // Gestion du pop-up vidéo
+    let popup = document.getElementById("video-popup");
+    let player = document.getElementById("video-player");
+    let title = document.getElementById("video-title");
+    let closeButton = document.getElementById("close-popup");
+
+    document.querySelectorAll(".video-card").forEach(card => {
+        card.addEventListener("click", function () {
+            let videoSrc = this.getAttribute("data-src");
+            let videoTitle = this.getAttribute("data-title");
+
+            player.src = videoSrc;
+            player.play();
+            title.innerText = videoTitle;
+            popup.classList.remove("hidden");
+        });
+    });
+
+    // Fermeture du pop-up
+    closeButton.addEventListener("click", closePopup);
+    popup.addEventListener("click", function (e) {
+        if (e.target === popup) {
+            closePopup();
+        }
+    });
+
+    function closePopup() {
+        popup.classList.add("hidden");
+        player.pause();
+        player.src = "";
+    }
+});
