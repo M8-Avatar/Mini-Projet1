@@ -4,6 +4,24 @@ define('UPLOAD_DIR', dirname(__DIR__) . '/uploads/');
 define('VIDEO_DIR', UPLOAD_DIR . 'videos/');
 define('THUMB_DIR', UPLOAD_DIR . 'images/thumbnails/');
 
+function asset_url($path) {
+    // Détecte si on est en HTTPS
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+               || $_SERVER['SERVER_PORT'] == 443;
+
+    // Base dynamique selon le domaine
+    $protocol = $isHttps ? 'https://' : 'http://';
+    $host = $_SERVER['HTTP_HOST'];
+
+    // Si tu veux forcer le domaine en production :
+    // $host = 'www.departement974.fr';
+
+    // Supprime les éventuels / initiaux dans le chemin
+    $path = ltrim($path, '/');
+
+    // Retourne l’URL complète
+    return $protocol . $host . '/BiblioDP/' . $path;
+}
 /**
  * Gère l’upload d’un fichier de manière sécurisée et universelle.
  *

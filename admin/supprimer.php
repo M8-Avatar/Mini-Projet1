@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../includes/_guard.php';
 require_once __DIR__ . '/../includes/db.php';
 
 if (!isset($_GET['id'])) {

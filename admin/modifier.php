@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../includes/_guard.php';
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/functions.php';
 
@@ -76,12 +77,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                          WHERE id = ?");
     $up->execute([$titre, $description, $catId, $newVideoFile, $newThumbFile, $id]);
 
-    header('Location: index.php');
+    header('Location: dashboard.php');
     exit;
 }
 ?>
 
-<?php include __DIR__ . '/../includes/header.php';?>
+<?php include __DIR__ . '/a-header.php';?>
 <main class="container my-5">
   <h1 class="text-primary text-center mb-4">Modifier la vidéo</h1>
 
@@ -121,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
       <div class="col-md-6 text-center">
         <label class="form-label">Miniature actuelle</label><br>
-        <img src="uploads/images/thumbnails/<?= htmlspecialchars($video['miniature'] ?: 'DP_default.jpg') ?>" alt="Miniature" width="220" class="rounded shadow">
+        <img src="/../uploads/images/thumbnails/<?= htmlspecialchars($video['miniature'] ?: 'DP_default.jpg') ?>" alt="Miniature" width="220" class="rounded shadow">
       </div>
     </div>
 
@@ -136,8 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <div class="text-center">
-      <button type="submit" class="btn btn-primary px-4">Enregistrer</button>
-      <a href="index.php" class="btn btn-secondary px-4">Retour</a>
+      <button type="submit" class="btn btn-primary px-4" style="background-color: #b30000">Enregistrer</button>
+      <a href="dashboard.php" class="btn btn-secondary px-4">Retour</a>
     </div>
   </form>
 </main>
@@ -155,4 +156,4 @@ document.getElementById('categorie').addEventListener('change', function () {
   }
 });
 </script>
-<?php include __DIR__ . '/../includes/footer.php';?>
+<?php include __DIR__ . '/a-footer.php';?>

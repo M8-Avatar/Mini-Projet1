@@ -17,148 +17,56 @@ $query = "SELECT v.*, c.nom AS categorie
 $stmt = $pdo->prepare($query);
 $stmt->execute(['search' => "%$search%"]);
 $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// --- Récupération des catégories pour le modal ---
-$categories = $pdo->query("SELECT id, nom FROM categories ORDER BY nom ASC")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<?php include 'includes/header.php'; ?>
+<?php include __DIR__ . '/includes/header.php'; ?>
 
 <main class="container my-5">
-    <h1>Bienvenue sur la plateforme vidéo</h1>
-    <p>Recherchez et gérez les vidéos officielles du Département de La Réunion.</p>
+    <h1 class="mb-4 text-center">Vidéothèque du Département de La Réunion</h1>
 
-    <!-- Barre de recherche + bouton ajout -->
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-        <form class="d-flex" method="get" action="">
-            <input type="text" name="search" class="form-control me-2"
-                   placeholder="Rechercher une vidéo..."
-                   value="<?= htmlspecialchars($search) ?>">
-            <button type="submit" class="btn btn-primary">Rechercher</button>
-        </form>
-
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
-            Ajouter une vidéo
-        </button>
-    </div>
+    <!-- Barre de recherche -->
+    <form class="d-flex justify-content-center mb-5" method="get" action="">
+        <input type="text" name="search" class="form-control w-50 me-2"
+               placeholder="Rechercher une vidéo..."
+               value="<?= htmlspecialchars($search) ?>">
+        <button type="submit" class="btn btn-primary">Rechercher</button>
+    </form>
 
     <?php if (empty($videos)) : ?>
-        <p class="text-muted text-center">Aucune vidéo enregistrée pour le moment.</p>
+        <p class="text-muted text-center">Aucune vidéo trouvée.</p>
     <?php else : ?>
-        <div class="table-responsive">
-            <table class="table video-list align-middle">
-                <thead>
-                    <tr>
-                        <th>Miniature</th>
-                        <th>Titre</th>
-                        <th>Catégorie</th>
-                        <th>Description</th>
-                        <th>Date</th>
-                        <th class="text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($videos as $video): 
-                        $miniature = !empty($video['miniature'])
-                            ? 'uploads/images/thumbnails/' . htmlspecialchars($video['miniature'])
-                            : 'uploads/images/DP_default.jpg';
-                    ?>
-                        <tr>
-                            <td style="width: 150px;">
-                                <img src="<?= $miniature ?>" alt="<?= htmlspecialchars($video['titre']) ?>" class="thumb-mini">
-                            </td>
-                            <td><strong><?= htmlspecialchars($video['titre']) ?></strong></td>
-                            <td><?= htmlspecialchars($video['categorie']) ?></td>
-                            <td><?= htmlspecialchars($video['description']) ?></td>
-                            <td><?= date('d/m/Y', strtotime($video['date_publication'])) ?></td>
-                            <td class="text-center">
-                                <a href="modifier.php?id=<?= $video['id'] ?>" class="btn btn-warning btn-sm me-2">
-                                    Modifier
-                                </a>
-                                <a href="supprimer.php?id=<?= $video['id'] ?>" class="btn btn-danger btn-sm"
-                                   onclick="return confirm('Supprimer cette vidéo ?');">
-                                    Supprimer
-                                </a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+        <div class="row justify-content-center g-4">
+            <?php foreach ($videos as $video): 
+                $miniature = !empty($video['miniature'])
+                    ? asset_url('uploads/images/thumbnails/' . htmlspecialchars($video['miniature']))
+                    : asset_url('uploads/images/DP_default.jpg');
+                $videoFile = asset_url('uploads/videos/' . htmlspecialchars($video['fichier']));
+            ?>
+            <div class="col-md-4 col-lg-3">
+                <div class="card shadow-sm border-0 h-100">
+                    <img src="<?= $miniature ?>" class="card-img-top" alt="<?= htmlspecialchars($video['titre']) ?>">
+                    <div class="card-body text-center">
+                        <h5 class="card-title"><?= htmlspecialchars($video['titre']) ?></h5>
+                        <p class="text-muted mb-1"><?= htmlspecialchars($video['categorie']) ?></p>
+                        <p class="small"><?= htmlspecialchars($video['description']) ?></p>
+                        <video controls preload="metadata" class="w-100 mt-2 rounded">
+                            <source src="<?= $videoFile ?>" type="video/mp4">
+                            Votre navigateur ne supporte pas la lecture vidéo.
+                        </video>
+                        <p class="text-secondary mt-2 small">
+                            Publiée le <?= date('d/m/Y', strtotime($video['date_publication'])) ?>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
         </div>
     <?php endif; ?>
-
-    <!-- Modal d’ajout d’une vidéo -->
-    <div class="modal fade" id="uploadModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <form method="post" enctype="multipart/form-data" action="upload.php">
-            <div class="modal-header">
-              <h5 class="modal-title">Ajouter une vidéo</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-              <div class="mb-3">
-                <label for="titre">Titre de la vidéo</label>
-                <input type="text" id="titre" name="titre" class="form-control" required>
-              </div>
-
-              <div class="mb-3">
-                <label for="id_categorie">Catégorie</label>
-                <div class="input-group">
-                  <select id="id_categorie" name="id_categorie" class="form-select" required>
-                    <?php foreach ($categories as $cat): ?>
-                      <option value="<?= $cat['id'] ?>"><?= htmlspecialchars($cat['nom']) ?></option>
-                    <?php endforeach; ?>
-                    <option value="__new__">Nouvelle catégorie...</option>
-                  </select>
-                  <input type="text" id="new_categorie" name="new_categorie" class="form-control mt-2 d-none" placeholder="Nouvelle catégorie">
-                </div>
-              </div>
-
-              <div class="mb-3">
-                <label for="description">Description</label>
-                <textarea id="description" name="description" class="form-control"></textarea>
-              </div>
-
-              <div class="mb-3">
-                <label for="video">Fichier vidéo (.mp4)</label>
-                <input type="file" id="video" name="video" accept="video/mp4" class="form-control" required>
-              </div>
-
-              <div class="mb-3">
-                <label for="miniature">Miniature (.jpg ou .png)</label>
-                <input type="file" id="miniature" name="miniature" accept="image/*" class="form-control">
-              </div>
-            </div>
-
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Enregistrer</button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <div class="text-center mt-4">
+     <div class="text-center mt-4">
         <a href="export.php?type=csv" class="btn btn-secondary">Exporter la liste (CSV)</a>
         <a href="export.php?type=pdf" class="btn btn-danger">Exporter (PDF)</a>
     </div>
 </main>
 
-<script>
-document.getElementById('id_categorie').addEventListener('change', function() {
-    const inputNew = document.getElementById('new_categorie');
-    if (this.value === '__new__') {
-        inputNew.classList.remove('d-none');
-        inputNew.required = true;
-    } else {
-        inputNew.classList.add('d-none');
-        inputNew.required = false;
-    }
-});
-</script>
-
-<?php include 'includes/footer.php'; ?>
-<script src="assets/js/app.js"></script>
+<?php include __DIR__ . '/includes/footer.php'; ?>
+<script src="<?= asset_url('assets/js/app.js') ?>"></script>

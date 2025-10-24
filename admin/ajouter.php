@@ -1,6 +1,7 @@
 <?php
-require_once 'includes/db.php';
-require_once 'includes/functions.php';
+require_once __DIR__ . '/../includes/_guard.php';
+require_once '/../includes/db.php';
+require_once '/../includes/functions.php';
 
 /* Catégories existantes */
 $cats = $pdo->query("SELECT id, nom FROM categories ORDER BY nom ASC")->fetchAll(PDO::FETCH_ASSOC);
@@ -39,11 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ':id_categorie'  => $idCategorie
     ]);
 
-    header('Location: index.php');
+    header('Location: dashboard.php');
     exit;
 }
 ?>
-<?php include 'includes/header.php'; ?>
+<?php include '/a-header.php'; ?>
 
 <div class="container mt-4">
   <h2 class="text-primary mb-4">Ajouter une vidéo</h2>
@@ -84,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="text-center">
       <button class="btn btn-success px-4">Enregistrer</button>
-      <a href="index.php" class="btn btn-secondary px-4">Annuler</a>
+      <a href="dashboard.php" class="btn btn-secondary px-4">Annuler</a>
     </div>
   </form>
 </div>
@@ -102,4 +103,4 @@ document.getElementById('categorie').addEventListener('change', function () {
 });
 </script>
 
-<?php include 'includes/footer.php'; ?>
+<?php include 'a-footer.php'; ?>
