@@ -1,8 +1,9 @@
 <?php
-require_once 'includes/db.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 if (!defined('FPDF_FONTPATH')) {
-    define('FPDF_FONTPATH', __DIR__ . '/includes/fpdf/font/');
+    define('FPDF_FONTPATH', __DIR__ . '/../includes/fpdf/font/');
 }
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'fpdf' . DIRECTORY_SEPARATOR . 'fpdf.php';
 

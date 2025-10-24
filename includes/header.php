@@ -9,11 +9,14 @@
 </head>
 <body>
 
-<header>
+<header class="main-header">
   <div class="nav-container">
     <div class="logo">
       <img src="uploads/images/Département_de_La_Réunion.png" alt="Logo Département de La Réunion">
-      <span class="site-title">Département de La Réunion – Plateforme Vidéo</span>
+      <div class="site-text">
+        <h1 class="site-title">Département de La Réunion</h1>
+        <h2 class="site-subtitle">Plateforme Vidéo</h2>
+      </div>
     </div>
   </div>
 </header>

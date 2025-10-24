@@ -10,50 +10,91 @@ html, body {
     flex-direction: column;
     min-height: 100vh;
 }
-
 /* ================================
-   BARRE DE NAVIGATION
+   HEADER / NAVIGATION
 ================================ */
-header {
-  background-color: #0056b3; /* Bleu département */
-  padding: 15px 40px;
+.main-header {
+  background-color: #0056b3; /* bleu institutionnel */
+  padding: 20px 0;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
 .nav-container {
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  max-width: 1300px;
+  justify-content: center; /* centre tout horizontalement */
+  align-items: center;     /* centre verticalement */
+  max-width: 1400px;
   margin: 0 auto;
+  padding: 0 20px;
 }
 
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
 
 /* --- Logo --- */
-.logo {
-    display: flex;
-    align-items: center;
+.logo img {
+  width: 110px;
+  height: auto;
+  transition: transform 0.3s ease;
 }
 
-.logo img {
-  width: 105px;
-  height: auto;
-  margin-right: 20px;
+.logo img:hover {
+  transform: scale(1.05);
+}
+
+/* --- Texte du site --- */
+.site-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  color: white;
 }
 
 .site-title {
-  font-size: 28px;
-  font-weight: bold;
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
   color: white;
-  line-height: 1.3;
-  letter-spacing: 0.5px;
 }
 
-.logo span {
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
+.site-subtitle {
+  font-size: 18px;
+  font-weight: 400;
+  margin: 2px 0 0 0;
+  color: #e0e0e0;
+  letter-spacing: 0.3px;
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .logo {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .site-text {
+    align-items: center;
+  }
+
+  .site-title {
+    font-size: 24px;
+  }
+
+  .site-subtitle {
+    font-size: 16px;
+  }
+}
+
 
 /* --- Barre de recherche --- */
 .search-container {
@@ -243,6 +284,35 @@ footer {
 
 .footer-container a:hover {
     text-decoration: underline;
+}
+
+footer a {
+  color: #ffffff !important;
+  text-decoration: underline;
+  opacity: 0.85;
+  transition: 0.2s;
+}
+
+footer a:hover {
+  color: #ffd700 !important;
+  opacity: 1;
+  text-decoration: none;
+}
+
+/* Liens du footer — force l'apparence */
+footer .footer-container a,
+footer .footer-container a:link,
+footer .footer-container a:visited {
+  color: #fff !important;            /* blanc */
+  text-decoration: underline;
+  opacity: 0.95;
+}
+
+footer .footer-container a:hover,
+footer .footer-container a:focus {
+  color: #ffd700 !important;          /* doré au survol */
+  text-decoration: none;
+  opacity: 1;
 }
 
 /* ================================

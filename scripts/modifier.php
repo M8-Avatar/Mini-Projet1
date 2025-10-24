@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 if (!isset($_GET['id'])) die("Aucune vidéo spécifiée.");
 $id = (int) $_GET['id'];
@@ -80,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<?php include 'includes/header.php'; ?>
+<?php include __DIR__ . '/../includes/header.php';?>
 <main class="container my-5">
   <h1 class="text-primary text-center mb-4">Modifier la vidéo</h1>
 
@@ -154,4 +155,4 @@ document.getElementById('categorie').addEventListener('change', function () {
   }
 });
 </script>
-<?php include 'includes/footer.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php';?>

@@ -10,6 +10,8 @@ $query = "SELECT v.*, c.nom AS categorie
           FROM videos v
           JOIN categories c ON v.id_categorie = c.id
           WHERE v.titre LIKE :search
+             OR v.description LIKE :search
+             OR c.nom LIKE :search
           ORDER BY v.date_publication DESC";
 
 $stmt = $pdo->prepare($query);
@@ -23,7 +25,7 @@ $categories = $pdo->query("SELECT id, nom FROM categories ORDER BY nom ASC")->fe
 <?php include 'includes/header.php'; ?>
 
 <main class="container my-5">
-    <h1>Bienvenue sur la plateforme vidéo du Département</h1>
+    <h1>Bienvenue sur la plateforme vidéo</h1>
     <p>Recherchez et gérez les vidéos officielles du Département de La Réunion.</p>
 
     <!-- Barre de recherche + bouton ajout -->
